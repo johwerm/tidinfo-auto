@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Tidinfo Autofill
+// @name         tidinfo-autofill
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Räksallad
@@ -20,18 +20,25 @@
     );
 
     function add_save_approve_button() {
-        let buttonHtml = '<kendo-toolbar-renderer style="visibility: visible; display: inline-block;" class="ng-star-inserted"><button type="button" kendobutton="" tabindex="-1" class="save-approve-button k-button k-bare k-button-icontext ng-star-inserted" role="button" aria-disabled="false" dir="ltr" style="background-color: rgb(255, 255, 255); padding: 0px 10px;"><span class="k-icon k-i-heart ng-star-inserted" role="presentation"></span> Jag var här </button></kendo-toolbar-renderer>'
-        let separatorHtml = '<kendo-toolbar-renderer class="ng-star-inserted" style="visibility: visible; display: inline-block;"><div class="k-separator ng-star-inserted"></div></kendo-toolbar-renderer>'
+        if (document.getElementsByClassName("save-approve-button").length === 0) {
+            console.log("Adding buttons");
 
-        let toolbars = document.getElementsByClassName("app-toolbar-section");
-        toolbars[0].insertBefore(html_to_element(separatorHtml), toolbars[0].children[2]);
-        toolbars[0].insertBefore(html_to_element(buttonHtml), toolbars[0].children[2]);
-        toolbars[1].insertBefore(html_to_element(separatorHtml), toolbars[1].children[0]);
-        toolbars[1].insertBefore(html_to_element(buttonHtml), toolbars[1].children[0]);
+            let buttonHtml = '<kendo-toolbar-renderer style="visibility: visible; display: inline-block;" class="ng-star-inserted"><button type="button" kendobutton="" tabindex="-1" class="save-approve-button k-button k-bare k-button-icontext ng-star-inserted" role="button" aria-disabled="false" dir="ltr" style="background-color: rgb(255, 255, 255); padding: 0px 10px;"><span class="k-icon k-i-heart ng-star-inserted" role="presentation"></span> Jag var här </button></kendo-toolbar-renderer>'
+            let separatorHtml = '<kendo-toolbar-renderer class="ng-star-inserted" style="visibility: visible; display: inline-block;"><div class="k-separator ng-star-inserted"></div></kendo-toolbar-renderer>'
 
-        let buttons = document.getElementsByClassName("save-approve-button");
-        for (let b of buttons) {
-            b.addEventListener("click", save_and_approve, false)
+            let toolbars = document.getElementsByClassName("app-toolbar-section");
+
+            toolbars[0].insertBefore(html_to_element(separatorHtml), toolbars[0].children[2]);
+            toolbars[0].insertBefore(html_to_element(buttonHtml), toolbars[0].children[2]);
+            toolbars[1].insertBefore(html_to_element(separatorHtml), toolbars[1].children[0]);
+            toolbars[1].insertBefore(html_to_element(buttonHtml), toolbars[1].children[0]);
+
+            let buttons = document.getElementsByClassName("save-approve-button");
+            for (let b of buttons) {
+                b.addEventListener("click", save_and_approve, false)
+            }
+        } else {
+            console.log("Buttons added - skipping");
         }
     }
 
